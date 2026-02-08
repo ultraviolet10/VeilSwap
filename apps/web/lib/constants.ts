@@ -17,7 +17,7 @@ export const PHASE_DESCRIPTIONS: Record<IntentPhase, string> = {
 	submitting: "Confirm the swap transaction",
 	submitted: "Transaction confirmed, waiting for MPC servers",
 	processing: "MPC servers are privately computing optimal allocations",
-	settling: "Settlement transaction being submitted on-chain",
+	settling: "Settlement transaction being submitted onchain",
 	filled: "Swap completed successfully",
 	failed: "Settlement failed — you can retry",
 }

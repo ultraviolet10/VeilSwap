@@ -240,7 +240,7 @@ describe("Settlement - Allocation/Signature Pairing", () => {
 		expect(buggyPaired[2].alloc.partyId).toBe(2)
 		expect(buggyPaired[2].sig.partyId).toBe(1) // WRONG! Party 2's alloc paired with party 1's sig
 
-		// This would cause on-chain verification to fail!
+		// This would cause onchain verification to fail!
 	})
 })
 

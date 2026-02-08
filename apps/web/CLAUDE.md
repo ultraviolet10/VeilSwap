@@ -61,7 +61,7 @@ No test runner is configured yet. When tests are added, expect `pnpm test` to be
 - **Dark mode**: Via `prefers-color-scheme` media query and CSS variables in `globals.css`.
 - **ESLint**: Flat config format (ESLint 9+) in `eslint.config.mjs`.
 - **shadcn/ui**: Components live under `components/ui/`. Uses `npx shadcn@latest add <component>` CLI.
-- **Web3 stack**: Wagmi v2 + Viem + TanStack Query. SSR-safe via cookie storage (`config/wagmi.ts`). `Web3Provider` in `providers/web3-provider.tsx` wraps app in root layout with `cookieToInitialState`. Server-side on-chain reads use `lib/viem.ts` (separate server-only RPC env vars without `NEXT_PUBLIC_` prefix).
+- **Web3 stack**: Wagmi v2 + Viem + TanStack Query. SSR-safe via cookie storage (`config/wagmi.ts`). `Web3Provider` in `providers/web3-provider.tsx` wraps app in root layout with `cookieToInitialState`. Server-side onchain reads use `lib/viem.ts` (separate server-only RPC env vars without `NEXT_PUBLIC_` prefix).
 
 ## Monorepo Context
 

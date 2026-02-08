@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-	title: "HackMoney — Privacy-Preserving DEX",
+	title: "VeilSwap — Privacy-Preserving DEX",
 	description:
 		"Intent-based MPC settlement protocol for private, efficient swaps",
 }

@@ -27,8 +27,8 @@ export function SwapButton({
 	if (!isConnected) {
 		return (
 			<Button
-				className="w-full"
-				size="lg"
+				size="sm"
+				className="h-8 px-4 text-sm bg-brand text-brand-foreground hover:bg-brand/90"
 				onClick={() => {
 					const connector = connectors[0]
 					if (connector) connect({ connector })
@@ -41,7 +41,7 @@ export function SwapButton({
 
 	if (!hasTokens) {
 		return (
-			<Button className="w-full" size="lg" disabled>
+			<Button size="sm" className="h-8 px-4 text-sm" disabled>
 				Select tokens
 			</Button>
 		)
@@ -49,8 +49,8 @@ export function SwapButton({
 
 	if (!hasAmount) {
 		return (
-			<Button className="w-full" size="lg" disabled>
-				Enter an amount
+			<Button size="sm" className="h-8 px-4 text-sm" disabled>
+				Enter amount
 			</Button>
 		)
 	}
@@ -68,14 +68,14 @@ export function SwapButton({
 			case "settling":
 				return "Processing..."
 			default:
-				return needsApproval ? "Approve & Swap" : "Swap"
+				return needsApproval ? "Approve & Swap" : "Swap Now"
 		}
 	})()
 
 	return (
 		<Button
-			className="w-full"
-			size="lg"
+			size="sm"
+			className="h-8 px-4 text-sm bg-brand text-brand-foreground hover:bg-brand/90"
 			onClick={onSwap}
 			disabled={disabled || isActive}
 		>

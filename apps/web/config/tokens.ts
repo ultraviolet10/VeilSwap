@@ -6,6 +6,7 @@ export const TOKENS: Record<string, Token> = {
 		symbol: "USDC",
 		name: "USD Coin",
 		decimals: 6,
+		logoURI: "https://assets.coingecko.com/coins/images/6319/thumb/usdc.png",
 		addresses: {
 			[base.id]: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
 			[baseSepolia.id]: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
@@ -15,6 +16,7 @@ export const TOKENS: Record<string, Token> = {
 		symbol: "ETH",
 		name: "Ether",
 		decimals: 18,
+		logoURI: "https://assets.coingecko.com/coins/images/279/thumb/ethereum.png",
 		addresses: {
 			[base.id]: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
 			[baseSepolia.id]: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -24,6 +26,7 @@ export const TOKENS: Record<string, Token> = {
 		symbol: "WETH",
 		name: "Wrapped Ether",
 		decimals: 18,
+		logoURI: "https://assets.coingecko.com/coins/images/2518/thumb/weth.png",
 		addresses: {
 			[base.id]: "0x4200000000000000000000000000000000000006",
 			[baseSepolia.id]: "0x4200000000000000000000000000000000000006",

@@ -369,16 +369,16 @@ export class MPCServer {
 		// Note: tokenOut is what the nodes provide, tokenIn is what the user provides
 		let myCapacity = this.getCapacity(event.tokenOut)
 
-		// If we don't have cached capacity and have inventory manager, check on-chain balance
+		// If we don't have cached capacity and have inventory manager, check onchain balance
 		if (myCapacity === 0n && this.inventoryManager) {
-			console.log(`Checking on-chain balance for ${event.tokenOut}...`)
+			console.log(`Checking onchain balance for ${event.tokenOut}...`)
 			const onChainBalance = await this.inventoryManager.getBalance(
 				event.tokenOut,
 				true,
 			)
 
 			if (onChainBalance > 0n) {
-				console.log(`✅ Found on-chain balance: ${onChainBalance}`)
+				console.log(`✅ Found onchain balance: ${onChainBalance}`)
 				this.setCapacity(event.tokenOut, onChainBalance)
 				myCapacity = onChainBalance
 			} else {
@@ -386,7 +386,7 @@ export class MPCServer {
 				// This helps exercise Uniswap integration when tokenOut balance is zero.
 				await this.inventoryManager.getBalance(event.tokenIn, true)
 				console.log(
-					`No on-chain balance for ${event.tokenOut}, attempting to swap from other tokens...`,
+					`No onchain balance for ${event.tokenOut}, attempting to swap from other tokens...`,
 				)
 
 				const result = await this.inventoryManager.fulfillRequirement(

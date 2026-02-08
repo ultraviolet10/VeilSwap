@@ -2,7 +2,7 @@
 
 ## Overview
 
-Build a minimal swap interface + LP showcase page for the intent-based MPC settlement protocol. Webapp watches on-chain events only (no direct MPC server communication). First demo uses real wallet tx + mock settlement timer.
+Build a minimal swap interface + LP showcase page for the intent-based MPC settlement protocol. Webapp watches onchain events only (no direct MPC server communication). First demo uses real wallet tx + mock settlement timer.
 
 ---
 
@@ -49,7 +49,7 @@ config/
 
 hooks/
   use-intent-lifecycle.ts           # Full swap->settle orchestration
-  use-intent-status.ts              # Watch single intent on-chain
+  use-intent-status.ts              # Watch single intent onchain
   use-token-balance.ts              # ERC20 balanceOf
   use-token-allowance.ts            # ERC20 allowance
   use-approve-token.ts              # ERC20 approve write
@@ -76,7 +76,7 @@ types/
 
 ## Core Design Decisions
 
-### 1. On-chain events only, no MPC server coupling
+### 1. onchain events only, no MPC server coupling
 Webapp watches `IntentCreated` and `IntentFilled` events via `useWatchContractEvent`. No WebSocket/HTTP to MPC servers. Status goes: Submitted -> Processing (opaque) -> Filled/Failed. Privacy maximized.
 
 ### 2. ABI management: `as const` literals, manual sync
@@ -138,7 +138,7 @@ Key UX: swap form and intent tracker are the SAME card. After submitting, form c
 
 ## LP Showcase Page (`/lp`)
 
-Displays publicly observable on-chain data only:
+Displays publicly observable onchain data only:
 
 1. **Active LP Table**: Registered server addresses, total settlements participated, uptime indicator
 2. **Protocol Stats**: Total intents created, filled, fill rate, average settlement time
@@ -219,7 +219,7 @@ const totalIntents = await client.readContract({
 **What the user sees:**
 1. Connect wallet on Base Sepolia
 2. Swap card: enter USDC amount, see ETH output estimate
-3. Click Swap -> approve USDC -> submit intent tx (real on-chain)
+3. Click Swap -> approve USDC -> submit intent tx (real onchain)
 4. Watch animated phase tracker: Submitted -> Processing (5-7s mock) -> Filled
 5. See completion card with "settlement" details
 

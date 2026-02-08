@@ -28,10 +28,10 @@ function ExplorerLink({ hash, label }: { hash: `0x${string}`; label: string }) {
 			href={`${BLOCK_EXPLORER_URL}/tx/${hash}`}
 			target="_blank"
 			rel="noopener noreferrer"
-			className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+			className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-all duration-150 hover:translate-x-0.5"
 		>
 			{label}: {truncateAddress(hash, 6)}
-			<ExternalLink className="h-3 w-3" />
+			<ExternalLink className="h-3 w-3 transition-transform duration-150 group-hover:scale-110" />
 		</a>
 	)
 }
@@ -50,17 +50,22 @@ export function IntentTracker() {
 			<div className="flex items-center justify-between">
 				<IntentPhaseBadge phase={phase} />
 				{(phase === "filled" || phase === "failed") && (
-					<Button variant="ghost" size="sm" onClick={reset}>
+					<Button
+						variant="ghost"
+						size="sm"
+						onClick={reset}
+						className="transition-all duration-150 hover:translate-x-0.5"
+					>
 						New Swap
 					</Button>
 				)}
 			</div>
 
-			<p className="text-sm text-muted-foreground">
+			<p className="text-sm text-muted-foreground animate-fade-in-up">
 				{PHASE_DESCRIPTIONS[phase]}
 			</p>
 
-			{/* Phase progress steps */}
+			{/* Phase progress steps with stagger animation */}
 			<div className="space-y-1.5">
 				{ORDERED_PHASES.map((p, i) => {
 					const isComplete = currentIdx > i
@@ -68,24 +73,28 @@ export function IntentTracker() {
 					const isFailed = phase === "failed" && isCurrent
 
 					return (
-						<div key={p} className="flex items-center gap-2 text-sm">
+						<div
+							key={p}
+							className="flex items-center gap-2 text-sm animate-stagger-in"
+							style={{ animationDelay: `${i * 50}ms` }}
+						>
 							{isComplete ? (
-								<Check className="h-3.5 w-3.5 text-green-500" />
+								<Check className="h-3.5 w-3.5 text-brand animate-fade-in-scale" />
 							) : isFailed ? (
-								<X className="h-3.5 w-3.5 text-destructive" />
+								<X className="h-3.5 w-3.5 text-destructive animate-fade-in-scale" />
 							) : isCurrent ? (
-								<Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
+								<Loader2 className="h-3.5 w-3.5 animate-spin-smooth text-brand motion-reduce:animate-none" />
 							) : (
-								<div className="h-3.5 w-3.5 rounded-full border border-muted-foreground/30" />
+								<div className="h-3.5 w-3.5 rounded-full border border-muted-foreground/30 transition-colors duration-200" />
 							)}
 							<span
-								className={
+								className={`transition-all duration-200 ${
 									isComplete
 										? "text-muted-foreground"
 										: isCurrent
-											? "font-medium"
+											? "font-medium text-foreground"
 											: "text-muted-foreground/50"
-								}
+								}`}
 							>
 								{p.charAt(0).toUpperCase() + p.slice(1)}
 							</span>
@@ -95,7 +104,7 @@ export function IntentTracker() {
 			</div>
 
 			{/* Tx info with explorer links */}
-			<div className="space-y-1">
+			<div className="space-y-1 animate-fade-in-up [animation-delay:300ms]">
 				{txHash && <ExplorerLink hash={txHash} label="Tx" />}
 				{intentId && (
 					<p className="text-xs text-muted-foreground">
@@ -107,7 +116,9 @@ export function IntentTracker() {
 				)}
 			</div>
 
-			{error && <p className="text-sm text-destructive">{error}</p>}
+			{error && (
+				<p className="text-sm text-destructive animate-fade-in-up">{error}</p>
+			)}
 		</div>
 	)
 }

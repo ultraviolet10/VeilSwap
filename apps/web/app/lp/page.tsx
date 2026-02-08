@@ -41,9 +41,9 @@ export default async function LpPage() {
 	return (
 		<div className="mx-auto max-w-5xl px-4 py-8">
 			{/* Command palette style header */}
-			<div className="mb-6 flex items-center justify-between">
+			<div className="mb-6 flex items-center justify-between animate-fade-in-up">
 				<div className="flex items-center gap-3">
-					<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand/10">
+					<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand/10 transition-transform duration-200 hover:scale-105">
 						<Server className="h-5 w-5 text-brand" />
 					</div>
 					<div>
@@ -55,7 +55,7 @@ export default async function LpPage() {
 				</div>
 				<div className="flex items-center gap-1.5 text-xs text-muted-foreground/50">
 					<Keyboard className="h-3 w-3" />
-					<kbd className="rounded border bg-muted px-1.5 py-0.5 font-mono text-[10px]">
+					<kbd className="rounded border bg-muted px-1.5 py-0.5 font-mono text-[10px] transition-all duration-150 hover:bg-muted/80 hover:scale-105">
 						R
 					</kbd>
 					<span>refresh</span>
@@ -63,10 +63,16 @@ export default async function LpPage() {
 			</div>
 
 			<div className="space-y-6">
-				<LpStats stats={stats} />
+				<div className="animate-fade-in-up [animation-delay:100ms]">
+					<LpStats stats={stats} />
+				</div>
 				<div className="grid gap-6 lg:grid-cols-2">
-					<LpTable servers={servers} />
-					<RecentSettlements settlements={recentSettlements} />
+					<div className="animate-fade-in-up [animation-delay:200ms]">
+						<LpTable servers={servers} />
+					</div>
+					<div className="animate-fade-in-up [animation-delay:300ms]">
+						<RecentSettlements settlements={recentSettlements} />
+					</div>
 				</div>
 			</div>
 		</div>

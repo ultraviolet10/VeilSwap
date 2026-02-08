@@ -45,23 +45,23 @@ export default function IntentPage() {
 				},
 				{
 					label: "Deadline",
-					value: new Date(
-						Number(intentData.deadline) * 1000,
-					).toLocaleString(),
+					value: new Date(Number(intentData.deadline) * 1000).toLocaleString(),
 				},
-		  ]
+			]
 		: []
 
 	return (
 		<div className="flex min-h-[calc(100vh-3.5rem)] items-start justify-center pt-16 px-4">
-			<div className="w-full max-w-md">
+			<div className="w-full max-w-md animate-fade-in-up">
 				{/* Command palette style header */}
-				<div className="mb-4 flex items-center justify-between">
+				<div className="mb-4 flex items-center justify-between animate-fade-in-up [animation-delay:50ms]">
 					<div className="flex items-center gap-2">
-						<div className="rounded-md bg-muted px-2 py-1 text-xs font-mono text-muted-foreground">
+						<div className="rounded-md bg-muted px-2 py-1 text-xs font-mono text-muted-foreground transition-colors duration-150 hover:bg-muted/80">
 							⌘I
 						</div>
-						<span className="text-sm text-muted-foreground">Intent details</span>
+						<span className="text-sm text-muted-foreground">
+							Intent details
+						</span>
 					</div>
 					<div className="flex items-center gap-1.5 text-xs text-muted-foreground/50">
 						<Keyboard className="h-3 w-3" />
@@ -70,7 +70,7 @@ export default function IntentPage() {
 				</div>
 
 				{/* Main card */}
-				<div className="overflow-hidden rounded-xl border bg-card shadow-2xl shadow-black/5">
+				<div className="overflow-hidden rounded-xl border bg-card shadow-2xl shadow-black/5 animate-fade-in-scale [animation-delay:100ms]">
 					{/* Header */}
 					<div className="border-b px-4 py-3">
 						<div className="flex items-center gap-2">
@@ -84,16 +84,17 @@ export default function IntentPage() {
 					{/* Content */}
 					<div className="divide-y">
 						{intentData ? (
-							fields.map((field) => (
+							fields.map((field, i) => (
 								<div
 									key={field.label}
-									className="flex items-center justify-between px-4 py-3 hover:bg-muted/30 transition-colors"
+									className="group flex items-center justify-between px-4 py-3 transition-all duration-200 ease-out hover:bg-muted/30 animate-stagger-in"
+									style={{ animationDelay: `${150 + i * 40}ms` }}
 								>
 									<span className="text-sm text-muted-foreground">
 										{field.label}
 									</span>
 									<span
-										className={`text-sm ${field.mono ? "font-mono text-xs" : ""} ${field.highlight ? "text-brand font-medium" : ""}`}
+										className={`text-sm transition-all duration-150 group-hover:translate-x-0.5 ${field.mono ? "font-mono text-xs" : ""} ${field.highlight ? "text-brand font-medium" : ""}`}
 									>
 										{field.value}
 									</span>
@@ -123,14 +124,14 @@ export default function IntentPage() {
 				</div>
 
 				{/* Keyboard hints */}
-				<div className="mt-6 flex justify-center gap-6 text-xs text-muted-foreground/50">
-					<span>
+				<div className="mt-6 flex justify-center gap-6 text-xs text-muted-foreground/50 animate-fade-in-up [animation-delay:400ms]">
+					<span className="transition-colors duration-150 hover:text-muted-foreground">
 						<kbd className="font-mono">↑↓</kbd> navigate
 					</span>
-					<span>
+					<span className="transition-colors duration-150 hover:text-muted-foreground">
 						<kbd className="font-mono">Enter</kbd> copy
 					</span>
-					<span>
+					<span className="transition-colors duration-150 hover:text-muted-foreground">
 						<kbd className="font-mono">Esc</kbd> back
 					</span>
 				</div>

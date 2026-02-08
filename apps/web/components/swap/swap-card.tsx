@@ -110,23 +110,23 @@ export function SwapCard() {
 			: null
 
 	return (
-		<div className="w-full max-w-[440px]">
+		<div className="w-full max-w-[440px] animate-fade-in-up">
 			{/* Command palette style header */}
-			<div className="mb-4 flex items-center justify-between">
+			<div className="mb-4 flex items-center justify-between animate-fade-in-up [animation-delay:100ms]">
 				<div className="flex items-center gap-2">
-					<div className="rounded-md bg-muted px-2 py-1 text-xs font-mono text-muted-foreground">
+					<div className="rounded-md bg-muted px-2 py-1 text-xs font-mono text-muted-foreground transition-colors duration-150 hover:bg-muted/80">
 						⌘K
 					</div>
 					<span className="text-sm text-muted-foreground">Quick swap</span>
 				</div>
-				<button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
+				<button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-all duration-150 hover:translate-x-0.5 active:scale-95">
 					<Clock className="h-3 w-3" />
 					History
 				</button>
 			</div>
 
 			{/* Main interface - command palette aesthetic */}
-			<div className="overflow-hidden rounded-xl border bg-card shadow-2xl shadow-black/5">
+			<div className="overflow-hidden rounded-xl border bg-card shadow-2xl shadow-black/5 animate-fade-in-scale [animation-delay:50ms]">
 				{/* Search-like input header */}
 				<div className="border-b px-4 py-3">
 					<div className="flex items-center gap-3">
@@ -136,7 +136,11 @@ export function SwapCard() {
 						<div className="flex-1" />
 						<Popover>
 							<PopoverTrigger asChild>
-								<Button variant="ghost" size="icon" className="h-6 w-6">
+								<Button
+									variant="ghost"
+									size="icon"
+									className="h-6 w-6 hover:rotate-45 transition-transform duration-200"
+								>
 									<Settings2 className="h-3.5 w-3.5" />
 								</Button>
 							</PopoverTrigger>
@@ -170,12 +174,12 @@ export function SwapCard() {
 				/>
 
 				{/* Direction indicator - inline */}
-				<div className="flex items-center gap-3 px-4 py-2 bg-muted/30">
-					<ArrowDown className="h-4 w-4 text-muted-foreground" />
+				<div className="flex items-center gap-3 px-4 py-2 bg-muted/30 transition-colors duration-200 hover:bg-muted/50">
+					<ArrowDown className="h-4 w-4 text-muted-foreground transition-transform duration-200 group-hover:translate-y-0.5" />
 					<div className="flex-1 flex items-center gap-2">
 						{rate && tokenIn && tokenOut && (
 							<>
-								<TrendingUp className="h-3 w-3 text-brand" />
+								<TrendingUp className="h-3 w-3 text-brand animate-pulse-subtle" />
 								<span className="text-xs text-muted-foreground">
 									1 {tokenIn.symbol} = {rate} {tokenOut.symbol}
 								</span>
@@ -203,7 +207,7 @@ export function SwapCard() {
 				{/* Action bar */}
 				<div className="flex items-center justify-between border-t bg-muted/20 px-4 py-3">
 					<div className="flex items-center gap-2">
-						<kbd className="rounded border bg-background px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground">
+						<kbd className="rounded border bg-background px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground transition-all duration-150 hover:bg-muted hover:scale-105">
 							Enter
 						</kbd>
 						<span className="text-xs text-muted-foreground">to confirm</span>
@@ -219,19 +223,20 @@ export function SwapCard() {
 
 				{/* Intent tracker shows when swap is in progress */}
 				{phase !== "idle" && (
-					<div className="border-t px-4 py-3">
+					<div className="border-t px-4 py-3 animate-fade-in-up">
 						<IntentTracker />
 					</div>
 				)}
 			</div>
 
 			{/* Quick tokens */}
-			<div className="mt-4 flex items-center gap-2">
+			<div className="mt-4 flex items-center gap-2 animate-fade-in-up [animation-delay:200ms]">
 				<span className="text-xs text-muted-foreground">Quick:</span>
-				{["ETH", "USDC", "WBTC", "DAI"].map((token) => (
+				{["ETH", "USDC", "WBTC", "DAI"].map((token, i) => (
 					<button
 						key={token}
-						className="rounded-md border bg-card px-2 py-1 text-xs font-medium hover:bg-muted transition-colors"
+						className="rounded-md border bg-card px-2 py-1 text-xs font-medium transition-all duration-150 hover:bg-muted hover:border-brand/30 hover:-translate-y-0.5 hover:shadow-sm active:scale-95 active:translate-y-0"
+						style={{ animationDelay: `${250 + i * 50}ms` }}
 					>
 						{token}
 					</button>
@@ -239,14 +244,14 @@ export function SwapCard() {
 			</div>
 
 			{/* Keyboard hints */}
-			<div className="mt-6 flex justify-center gap-6 text-xs text-muted-foreground/50">
-				<span>
+			<div className="mt-6 flex justify-center gap-6 text-xs text-muted-foreground/50 animate-fade-in-up [animation-delay:400ms]">
+				<span className="transition-colors duration-150 hover:text-muted-foreground">
 					<kbd className="font-mono">↑↓</kbd> tokens
 				</span>
-				<span>
+				<span className="transition-colors duration-150 hover:text-muted-foreground">
 					<kbd className="font-mono">Tab</kbd> fields
 				</span>
-				<span>
+				<span className="transition-colors duration-150 hover:text-muted-foreground">
 					<kbd className="font-mono">Esc</kbd> cancel
 				</span>
 			</div>

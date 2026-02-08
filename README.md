@@ -1,6 +1,6 @@
 # VeilSwap
 
-Privacy-preserving intent settlement via MPC nodes, on-chain Settlement contract, and a web UI.
+Privacy-preserving intent settlement via MPC nodes, onchain Settlement contract, and a web UI.
 
 ## Monorepo Structure
 

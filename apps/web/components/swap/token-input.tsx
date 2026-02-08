@@ -2,8 +2,8 @@
 
 import { TokenSelector } from "#/components/swap/token-selector"
 import { Input } from "#/components/ui/input"
-import { cn } from "#/lib/utils"
 import { formatTokenAmount } from "#/lib/format"
+import { cn } from "#/lib/utils"
 import type { Token } from "#/types/token"
 
 interface TokenInputProps {
@@ -34,15 +34,20 @@ export function TokenInput({
 	return (
 		<div
 			className={cn(
-				"flex items-center gap-4 border-b px-4 py-4 transition-colors cursor-text",
+				"group flex items-center gap-4 border-b px-4 py-4 cursor-text",
+				"transition-all duration-200 ease-out",
 				!disabled && "hover:bg-muted/30",
-				disabled && "opacity-60"
+				disabled && "opacity-60",
 			)}
 		>
 			<div
 				className={cn(
 					"flex h-10 w-10 items-center justify-center rounded-lg text-lg",
-					highlight ? "bg-brand/10 text-brand" : "bg-muted"
+					"transition-all duration-200 ease-out",
+					"group-hover:scale-105",
+					highlight
+						? "bg-brand/10 text-brand group-hover:bg-brand/15"
+						: "bg-muted group-hover:bg-muted/80",
 				)}
 			>
 				{selectedToken?.icon || "?"}
@@ -64,7 +69,8 @@ export function TokenInput({
 						disabled={disabled}
 						className={cn(
 							"border-0 bg-transparent p-0 text-2xl font-medium shadow-none focus-visible:ring-0 w-full",
-							highlight && "text-brand"
+							"transition-colors duration-150",
+							highlight && "text-brand",
 						)}
 					/>
 					<TokenSelector
@@ -74,14 +80,14 @@ export function TokenInput({
 						disabled={disabled}
 					/>
 				</div>
-				<p className="text-xs text-muted-foreground mt-0.5">
+				<p className="text-xs text-muted-foreground mt-0.5 transition-colors duration-150">
 					{label}
 					{selectedToken && balance !== undefined && (
 						<>
 							{" · "}
 							<button
 								type="button"
-								className="hover:text-foreground transition-colors"
+								className="hover:text-foreground transition-all duration-150 hover:underline underline-offset-2"
 								onClick={() => {
 									if (onAmountChange && !readOnly) {
 										onAmountChange(

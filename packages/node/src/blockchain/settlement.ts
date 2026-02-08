@@ -1,6 +1,6 @@
 /**
  * Settlement Contract Interface
- * Handles on-chain settlement of fulfilled intents
+ * Handles onchain settlement of fulfilled intents
  */
 
 import {
@@ -47,7 +47,7 @@ const SETTLEMENT_ABI = parseAbi([
 
 /**
  * Settlement Manager
- * Coordinates on-chain settlement of intents
+ * Coordinates onchain settlement of intents
  */
 export class SettlementManager {
 	private publicClient: PublicClient

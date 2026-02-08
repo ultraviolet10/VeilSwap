@@ -9,7 +9,7 @@ function makeQueryClient() {
 	return new QueryClient({
 		defaultOptions: {
 			queries: {
-				staleTime: 60 * 1000, // 1 min — avoid re-fetching on-chain data too aggressively
+				staleTime: 60 * 1000, // 1 min — avoid re-fetching onchain data too aggressively
 				refetchOnWindowFocus: false,
 			},
 		},

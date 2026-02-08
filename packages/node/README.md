@@ -255,7 +255,7 @@ minOutput = targetOutput * (1 - slippage)
 2. **Slippage Risk**: 5% default may not suit all pairs
 3. **Liquidity**: Requires Uniswap v4 liquidity
 4. **Latency**: Adds 10-30 seconds
-5. **MEV Exposure**: Swap visible on-chain
+5. **MEV Exposure**: Swap visible onchain
 
 ## Configuration
 
@@ -503,7 +503,7 @@ Each node:
 1. Signs their allocation
 2. Exchanges signatures via P2P
 3. Leader submits batchFillIntent
-4. Atomic on-chain execution
+4. Atomic onchain execution
 ```
 
 ## Privacy Guarantees
@@ -520,7 +520,7 @@ Each node:
 
 - ✓ Whether network can fulfill order (boolean)
 - ✓ Each server learns ONLY their own allocation
-- ✓ Final allocations become public on-chain
+- ✓ Final allocations become public onchain
 
 ### Security Model
 

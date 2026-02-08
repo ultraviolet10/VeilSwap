@@ -16,7 +16,7 @@ export default async function LpPage() {
 	// Map registered nodes to server format
 	const servers = lpStats.registeredNodes.map((address) => ({
 		address,
-		settlements: 0, // We don't track per-node settlements on-chain yet
+		settlements: 0, // We don't track per-node settlements onchain yet
 		online: true, // Assume registered nodes are online
 	}))
 
@@ -24,7 +24,7 @@ export default async function LpPage() {
 		totalIntents: intentStats.totalIntents,
 		totalFilled: intentStats.filledIntents,
 		fillRate: intentStats.fillRate,
-		avgSettlementTime: "N/A", // Not tracked on-chain
+		avgSettlementTime: "N/A", // Not tracked onchain
 	}
 
 	// Recent settlements placeholder - would need event indexing for real data
@@ -49,7 +49,7 @@ export default async function LpPage() {
 					<div>
 						<h1 className="text-xl font-semibold tracking-tight">LP Servers</h1>
 						<p className="text-xs text-muted-foreground">
-							On-chain data from Base Sepolia · {lpStats.totalNodes} nodes
+							onchain data from Base Sepolia · {lpStats.totalNodes} nodes
 						</p>
 					</div>
 				</div>

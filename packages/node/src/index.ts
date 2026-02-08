@@ -26,8 +26,8 @@ async function main() {
 	)
 
 	try {
-		// Load configuration
-		const config = loadConfig()
+		// Load configuration (async for ENS resolution/registration)
+		const config = await loadConfig()
 
 		// Display wallet information
 		displayWalletInfo(config.wallet)

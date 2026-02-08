@@ -17,6 +17,7 @@ import {
 	parsePeerList,
 	validateNodeName,
 } from "./utils/ens.js"
+import type { ENSConfig } from "./utils/ens-resolver.js"
 import { getOrCreateWallet, type WalletInfo } from "./utils/wallet.js"
 
 // Load .env file
@@ -50,12 +51,43 @@ export interface Config {
 
 	// Uniswap configuration
 	enableAutoSwap: boolean
+
+	// ENS configuration (optional)
+	ensConfig?: ENSConfig
+}
+
+/**
+ * Load ENS configuration from environment variables
+ */
+function loadENSConfig(): ENSConfig | undefined {
+	const l1RpcUrl = process.env.L1_RPC_URL
+	const baseRpcUrl = process.env.BASE_MAINNET_RPC_URL
+	const ownerPrivateKey = process.env.VEILSWAP_ENS_OWNER_KEY as Hash | undefined
+	const disableRegistration =
+		process.env.DISABLE_ENS_REGISTRATION?.toLowerCase() === "true"
+
+	// ENS requires both L1 and Base RPC URLs
+	if (!l1RpcUrl || !baseRpcUrl) {
+		if (ownerPrivateKey) {
+			console.warn(
+				"ENS owner key provided but missing L1_RPC_URL or BASE_MAINNET_RPC_URL",
+			)
+		}
+		return undefined
+	}
+
+	return {
+		l1RpcUrl,
+		baseRpcUrl,
+		ownerPrivateKey,
+		disableRegistration,
+	}
 }
 
 /**
  * Load configuration from environment variables
  */
-export function loadConfig(): Config {
+export async function loadConfig(): Promise<Config> {
 	// Node identity - support auto-generation from base ENS
 	const baseEns = process.env.BASE_ENS // e.g., "myproject.eth"
 	const nodeIndex = process.env.NODE_INDEX
@@ -70,7 +102,7 @@ export function loadConfig(): Config {
 	} else if (baseEns && nodeIndex !== undefined) {
 		// Auto-generate from BASE_ENS + NODE_INDEX
 		nodeName = generateEnsSubname(baseEns, nodeIndex)
-		console.log(`🏷️  Auto-generated node name: ${nodeName}`)
+		console.log(`Auto-generated node name: ${nodeName}`)
 	} else {
 		throw new Error(
 			"Either NODE_NAME or (BASE_ENS + NODE_INDEX) must be provided",
@@ -96,9 +128,16 @@ export function loadConfig(): Config {
 	const chainId = getEnvNumber("CHAIN_ID", 31337)
 	const settlementAddress = getEnv("SETTLEMENT_ADDRESS") as Address
 
+	// Load ENS configuration
+	const ensConfig = loadENSConfig()
+
 	// Wallet management - auto-generate if not provided
 	const privateKeyEnv = process.env.PRIVATE_KEY as Hash | undefined
-	const wallet = getOrCreateWallet(nodeName, privateKeyEnv)
+	const wallet = await getOrCreateWallet(nodeName, {
+		privateKey: privateKeyEnv,
+		nodeIndex,
+		ensConfig,
+	})
 
 	// Build peer configuration for MPC server
 	const peers = buildPeerConfig(allNodes, myNode.partyId, wallet.address)
@@ -124,6 +163,7 @@ export function loadConfig(): Config {
 		wallet,
 		initialCapacities,
 		enableAutoSwap,
+		ensConfig,
 	}
 }
 
@@ -292,6 +332,9 @@ export function printConfig(config: Config): void {
 		`║ Network:       ${`${config.address}:${config.port}`.padEnd(44)}║`,
 	)
 	console.log(`║ Wallet:        ${config.wallet.address.padEnd(44)}║`)
+	if (config.wallet.ensName) {
+		console.log(`║ ENS Name:      ${config.wallet.ensName.padEnd(44)}║`)
+	}
 	console.log(
 		"╠═══════════════════════════════════════════════════════════════╣",
 	)

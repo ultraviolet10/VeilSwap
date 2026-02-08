@@ -1,3 +1,4 @@
+import { Keyboard, Server } from "lucide-react"
 import { LpStats } from "#/components/lp/lp-stats"
 import { LpTable } from "#/components/lp/lp-table"
 import { RecentSettlements } from "#/components/lp/recent-settlements"
@@ -38,18 +39,35 @@ export default async function LpPage() {
 	}[] = []
 
 	return (
-		<div className="mx-auto max-w-5xl space-y-6 px-4 py-8">
-			<div>
-				<h1 className="text-2xl font-semibold tracking-tight">LP Servers</h1>
-				<p className="text-sm text-muted-foreground">
-					On-chain data from Base Sepolia. Node count: {lpStats.totalNodes}
-				</p>
+		<div className="mx-auto max-w-5xl px-4 py-8">
+			{/* Command palette style header */}
+			<div className="mb-6 flex items-center justify-between">
+				<div className="flex items-center gap-3">
+					<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand/10">
+						<Server className="h-5 w-5 text-brand" />
+					</div>
+					<div>
+						<h1 className="text-xl font-semibold tracking-tight">LP Servers</h1>
+						<p className="text-xs text-muted-foreground">
+							On-chain data from Base Sepolia · {lpStats.totalNodes} nodes
+						</p>
+					</div>
+				</div>
+				<div className="flex items-center gap-1.5 text-xs text-muted-foreground/50">
+					<Keyboard className="h-3 w-3" />
+					<kbd className="rounded border bg-muted px-1.5 py-0.5 font-mono text-[10px]">
+						R
+					</kbd>
+					<span>refresh</span>
+				</div>
 			</div>
 
-			<LpStats stats={stats} />
-			<div className="grid gap-6 lg:grid-cols-2">
-				<LpTable servers={servers} />
-				<RecentSettlements settlements={recentSettlements} />
+			<div className="space-y-6">
+				<LpStats stats={stats} />
+				<div className="grid gap-6 lg:grid-cols-2">
+					<LpTable servers={servers} />
+					<RecentSettlements settlements={recentSettlements} />
+				</div>
 			</div>
 		</div>
 	)

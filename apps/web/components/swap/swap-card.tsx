@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowDown, Settings2 } from "lucide-react"
+import { ArrowDown, Clock, Keyboard, Settings2, TrendingUp } from "lucide-react"
 import { useCallback, useState } from "react"
 import { parseUnits } from "viem"
 import { useAccount, useChainId } from "wagmi"
@@ -9,13 +9,11 @@ import { SlippageSettings } from "#/components/swap/slippage-settings"
 import { SwapButton } from "#/components/swap/swap-button"
 import { TokenInput } from "#/components/swap/token-input"
 import { Button } from "#/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "#/components/ui/card"
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
 } from "#/components/ui/popover"
-import { Separator } from "#/components/ui/separator"
 import { INTENT_REGISTRY } from "#/config/contracts"
 import { BUY_TOKENS, SELL_TOKENS } from "#/config/tokens"
 import type { SupportedChainId } from "#/config/wagmi"
@@ -106,28 +104,57 @@ export function SwapCard() {
 
 	const isActive = phase !== "idle" && phase !== "filled" && phase !== "failed"
 
+	const rate =
+		amountIn && amountOut && Number.parseFloat(amountIn) > 0
+			? (Number.parseFloat(amountOut) / Number.parseFloat(amountIn)).toFixed(6)
+			: null
+
 	return (
-		<Card className="w-full max-w-md">
-			<CardHeader className="pb-3">
-				<div className="flex items-center justify-between">
-					<CardTitle className="text-lg">Swap</CardTitle>
-					<Popover>
-						<PopoverTrigger asChild>
-							<Button variant="ghost" size="icon" className="h-8 w-8">
-								<Settings2 className="h-4 w-4" />
-							</Button>
-						</PopoverTrigger>
-						<PopoverContent className="w-72" align="end">
-							<SlippageSettings
-								slippageBps={slippageBps}
-								onSlippageChange={setSlippageBps}
-							/>
-						</PopoverContent>
-					</Popover>
+		<div className="w-full max-w-[440px]">
+			{/* Command palette style header */}
+			<div className="mb-4 flex items-center justify-between">
+				<div className="flex items-center gap-2">
+					<div className="rounded-md bg-muted px-2 py-1 text-xs font-mono text-muted-foreground">
+						⌘K
+					</div>
+					<span className="text-sm text-muted-foreground">Quick swap</span>
 				</div>
-			</CardHeader>
-			<CardContent className="space-y-2">
-				{/* Sell */}
+				<button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
+					<Clock className="h-3 w-3" />
+					History
+				</button>
+			</div>
+
+			{/* Main interface - command palette aesthetic */}
+			<div className="overflow-hidden rounded-xl border bg-card shadow-2xl shadow-black/5">
+				{/* Search-like input header */}
+				<div className="border-b px-4 py-3">
+					<div className="flex items-center gap-3">
+						<span className="text-sm font-medium text-muted-foreground">
+							Swap
+						</span>
+						<div className="flex-1" />
+						<Popover>
+							<PopoverTrigger asChild>
+								<Button variant="ghost" size="icon" className="h-6 w-6">
+									<Settings2 className="h-3.5 w-3.5" />
+								</Button>
+							</PopoverTrigger>
+							<PopoverContent className="w-72" align="end">
+								<SlippageSettings
+									slippageBps={slippageBps}
+									onSlippageChange={setSlippageBps}
+								/>
+							</PopoverContent>
+						</Popover>
+						<div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+							<Keyboard className="h-3 w-3" />
+							<span>Tab to switch</span>
+						</div>
+					</div>
+				</div>
+
+				{/* From row */}
 				<TokenInput
 					label="You pay"
 					tokens={SELL_TOKENS}
@@ -142,14 +169,25 @@ export function SwapCard() {
 					disabled={isActive}
 				/>
 
-				{/* Arrow */}
-				<div className="flex justify-center -my-1">
-					<div className="rounded-full border bg-background p-1.5">
-						<ArrowDown className="h-4 w-4 text-muted-foreground" />
+				{/* Direction indicator - inline */}
+				<div className="flex items-center gap-3 px-4 py-2 bg-muted/30">
+					<ArrowDown className="h-4 w-4 text-muted-foreground" />
+					<div className="flex-1 flex items-center gap-2">
+						{rate && tokenIn && tokenOut && (
+							<>
+								<TrendingUp className="h-3 w-3 text-brand" />
+								<span className="text-xs text-muted-foreground">
+									1 {tokenIn.symbol} = {rate} {tokenOut.symbol}
+								</span>
+							</>
+						)}
 					</div>
+					<span className="text-xs text-muted-foreground">
+						Slippage: {(slippageBps / 100).toFixed(1)}%
+					</span>
 				</div>
 
-				{/* Buy */}
+				{/* To row */}
 				<TokenInput
 					label="You receive"
 					tokens={BUY_TOKENS}
@@ -159,37 +197,59 @@ export function SwapCard() {
 					readOnly
 					balance={balanceOut}
 					disabled={isActive}
+					highlight
 				/>
 
-				{/* Rate preview */}
-				{tokenIn && tokenOut && amountIn && amountOut && (
-					<p className="text-center text-xs text-muted-foreground">
-						1 {tokenIn.symbol} ≈{" "}
-						{(
-							Number.parseFloat(amountOut) / Number.parseFloat(amountIn)
-						).toFixed(6)}{" "}
-						{tokenOut.symbol}
-					</p>
-				)}
-
-				<Separator />
-
-				<SwapButton
-					phase={phase}
-					hasAmount={parsedAmount > 0n}
-					hasTokens={!!tokenIn && !!tokenOut}
-					needsApproval={needsApproval}
-					onSwap={handleSwap}
-				/>
+				{/* Action bar */}
+				<div className="flex items-center justify-between border-t bg-muted/20 px-4 py-3">
+					<div className="flex items-center gap-2">
+						<kbd className="rounded border bg-background px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground">
+							Enter
+						</kbd>
+						<span className="text-xs text-muted-foreground">to confirm</span>
+					</div>
+					<SwapButton
+						phase={phase}
+						hasAmount={parsedAmount > 0n}
+						hasTokens={!!tokenIn && !!tokenOut}
+						needsApproval={needsApproval}
+						onSwap={handleSwap}
+					/>
+				</div>
 
 				{/* Intent tracker shows when swap is in progress */}
 				{phase !== "idle" && (
-					<>
-						<Separator />
+					<div className="border-t px-4 py-3">
 						<IntentTracker />
-					</>
+					</div>
 				)}
-			</CardContent>
-		</Card>
+			</div>
+
+			{/* Quick tokens */}
+			<div className="mt-4 flex items-center gap-2">
+				<span className="text-xs text-muted-foreground">Quick:</span>
+				{["ETH", "USDC", "WBTC", "DAI"].map((token) => (
+					<button
+						key={token}
+						className="rounded-md border bg-card px-2 py-1 text-xs font-medium hover:bg-muted transition-colors"
+					>
+						{token}
+					</button>
+				))}
+			</div>
+
+			{/* Keyboard hints */}
+			<div className="mt-6 flex justify-center gap-6 text-xs text-muted-foreground/50">
+				<span>
+					<kbd className="font-mono">↑↓</kbd> tokens
+				</span>
+				<span>
+					<kbd className="font-mono">Tab</kbd> fields
+				</span>
+				<span>
+					<kbd className="font-mono">Esc</kbd> cancel
+				</span>
+			</div>
+		</div>
 	)
 }

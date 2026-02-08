@@ -1,10 +1,10 @@
 "use client"
 
+import { FileText, Keyboard } from "lucide-react"
 import { useParams } from "next/navigation"
 import type { Hex } from "viem"
 import { formatUnits } from "viem"
 import { IntentPhaseBadge } from "#/components/intent/intent-phase-badge"
-import { Card, CardContent, CardHeader, CardTitle } from "#/components/ui/card"
 import { Skeleton } from "#/components/ui/skeleton"
 import { useIntentStatus } from "#/hooks/use-intent-status"
 import { IntentStatus } from "#/lib/abis/intent-registry"
@@ -23,72 +23,118 @@ export default function IntentPage() {
 		return "processing"
 	}
 
+	const fields = intentData
+		? [
+				{ label: "Intent ID", value: truncateAddress(intentId, 8), mono: true },
+				{ label: "User", value: truncateAddress(intentData.user), mono: true },
+				{
+					label: "Token In",
+					value: truncateAddress(intentData.tokenIn),
+					mono: true,
+				},
+				{
+					label: "Token Out",
+					value: truncateAddress(intentData.tokenOut),
+					mono: true,
+				},
+				{ label: "Amount In", value: formatUnits(intentData.amountIn, 18) },
+				{
+					label: "Min Amount Out",
+					value: formatUnits(intentData.minAmountOut, 18),
+					highlight: true,
+				},
+				{
+					label: "Deadline",
+					value: new Date(
+						Number(intentData.deadline) * 1000,
+					).toLocaleString(),
+				},
+		  ]
+		: []
+
 	return (
 		<div className="flex min-h-[calc(100vh-3.5rem)] items-start justify-center pt-16 px-4">
-			<Card className="w-full max-w-md">
-				<CardHeader>
-					<CardTitle className="text-lg">Intent Details</CardTitle>
-				</CardHeader>
-				<CardContent className="space-y-4">
-					<div className="space-y-2 text-sm">
-						<div className="flex justify-between">
-							<span className="text-muted-foreground">Intent ID</span>
-							<span className="font-mono text-xs">
-								{truncateAddress(intentId, 8)}
-							</span>
+			<div className="w-full max-w-md">
+				{/* Command palette style header */}
+				<div className="mb-4 flex items-center justify-between">
+					<div className="flex items-center gap-2">
+						<div className="rounded-md bg-muted px-2 py-1 text-xs font-mono text-muted-foreground">
+							⌘I
 						</div>
+						<span className="text-sm text-muted-foreground">Intent details</span>
+					</div>
+					<div className="flex items-center gap-1.5 text-xs text-muted-foreground/50">
+						<Keyboard className="h-3 w-3" />
+						<span>Esc to close</span>
+					</div>
+				</div>
 
+				{/* Main card */}
+				<div className="overflow-hidden rounded-xl border bg-card shadow-2xl shadow-black/5">
+					{/* Header */}
+					<div className="border-b px-4 py-3">
+						<div className="flex items-center gap-2">
+							<FileText className="h-4 w-4 text-muted-foreground" />
+							<span className="text-sm font-medium">Intent Details</span>
+							<div className="flex-1" />
+							{intentData && <IntentPhaseBadge phase={getPhaseFromStatus()} />}
+						</div>
+					</div>
+
+					{/* Content */}
+					<div className="divide-y">
 						{intentData ? (
-							<>
-								<div className="flex justify-between">
-									<span className="text-muted-foreground">User</span>
-									<span className="font-mono text-xs">
-										{truncateAddress(intentData.user)}
+							fields.map((field) => (
+								<div
+									key={field.label}
+									className="flex items-center justify-between px-4 py-3 hover:bg-muted/30 transition-colors"
+								>
+									<span className="text-sm text-muted-foreground">
+										{field.label}
+									</span>
+									<span
+										className={`text-sm ${field.mono ? "font-mono text-xs" : ""} ${field.highlight ? "text-brand font-medium" : ""}`}
+									>
+										{field.value}
 									</span>
 								</div>
-								<div className="flex justify-between">
-									<span className="text-muted-foreground">Token In</span>
-									<span className="font-mono text-xs">
-										{truncateAddress(intentData.tokenIn)}
-									</span>
-								</div>
-								<div className="flex justify-between">
-									<span className="text-muted-foreground">Token Out</span>
-									<span className="font-mono text-xs">
-										{truncateAddress(intentData.tokenOut)}
-									</span>
-								</div>
-								<div className="flex justify-between">
-									<span className="text-muted-foreground">Amount In</span>
-									<span>{formatUnits(intentData.amountIn, 18)}</span>
-								</div>
-								<div className="flex justify-between">
-									<span className="text-muted-foreground">Min Amount Out</span>
-									<span>{formatUnits(intentData.minAmountOut, 18)}</span>
-								</div>
-								<div className="flex justify-between">
-									<span className="text-muted-foreground">Deadline</span>
-									<span>
-										{new Date(
-											Number(intentData.deadline) * 1000,
-										).toLocaleString()}
-									</span>
-								</div>
-								<div className="flex justify-between items-center">
-									<span className="text-muted-foreground">Status</span>
-									<IntentPhaseBadge phase={getPhaseFromStatus()} />
-								</div>
-							</>
+							))
 						) : (
-							<div className="space-y-2">
-								<Skeleton className="h-4 w-full" />
-								<Skeleton className="h-4 w-3/4" />
-								<Skeleton className="h-4 w-1/2" />
+							<div className="space-y-3 px-4 py-4">
+								<div className="flex justify-between">
+									<Skeleton className="h-4 w-24" />
+									<Skeleton className="h-4 w-32" />
+								</div>
+								<div className="flex justify-between">
+									<Skeleton className="h-4 w-20" />
+									<Skeleton className="h-4 w-28" />
+								</div>
+								<div className="flex justify-between">
+									<Skeleton className="h-4 w-24" />
+									<Skeleton className="h-4 w-24" />
+								</div>
+								<div className="flex justify-between">
+									<Skeleton className="h-4 w-28" />
+									<Skeleton className="h-4 w-20" />
+								</div>
 							</div>
 						)}
 					</div>
-				</CardContent>
-			</Card>
+				</div>
+
+				{/* Keyboard hints */}
+				<div className="mt-6 flex justify-center gap-6 text-xs text-muted-foreground/50">
+					<span>
+						<kbd className="font-mono">↑↓</kbd> navigate
+					</span>
+					<span>
+						<kbd className="font-mono">Enter</kbd> copy
+					</span>
+					<span>
+						<kbd className="font-mono">Esc</kbd> back
+					</span>
+				</div>
+			</div>
 		</div>
 	)
 }

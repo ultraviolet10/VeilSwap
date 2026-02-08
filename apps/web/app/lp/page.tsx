@@ -66,11 +66,11 @@ export default async function LpPage() {
 				<div className="animate-fade-in-up [animation-delay:100ms]">
 					<LpStats stats={stats} />
 				</div>
-				<div className="grid gap-6 lg:grid-cols-2">
-					<div className="animate-fade-in-up [animation-delay:200ms]">
+				<div className="grid gap-6 lg:grid-cols-2 items-stretch">
+					<div className="animate-fade-in-up [animation-delay:200ms] h-full">
 						<LpTable servers={servers} />
 					</div>
-					<div className="animate-fade-in-up [animation-delay:300ms]">
+					<div className="animate-fade-in-up [animation-delay:300ms] h-full">
 						<RecentSettlements settlements={recentSettlements} />
 					</div>
 				</div>

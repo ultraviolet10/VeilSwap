@@ -16,7 +16,7 @@ interface LpTableProps {
 
 export function LpTable({ servers }: LpTableProps) {
 	return (
-		<div className="overflow-hidden rounded-xl border bg-card shadow-lg shadow-black/5">
+		<div className="overflow-hidden rounded-xl border bg-card shadow-lg shadow-black/5 h-full flex flex-col">
 			{/* Header */}
 			<div className="border-b px-4 py-3">
 				<div className="flex items-center gap-2">
@@ -36,7 +36,7 @@ export function LpTable({ servers }: LpTableProps) {
 			</div>
 
 			{/* Rows */}
-			<div className="divide-y">
+			<div className="divide-y flex-1">
 				{servers.map((server, i) => (
 					<div
 						key={server.address}

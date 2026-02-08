@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { TokenSelector } from "#/components/swap/token-selector"
 import { Input } from "#/components/ui/input"
 import { formatTokenAmount } from "#/lib/format"
@@ -50,7 +51,17 @@ export function TokenInput({
 						: "bg-muted group-hover:bg-muted/80",
 				)}
 			>
-				{selectedToken?.icon || "?"}
+				{selectedToken?.logoURI ? (
+					<Image
+						src={selectedToken.logoURI}
+						alt={selectedToken.symbol}
+						width={24}
+						height={24}
+						className="rounded-full"
+					/>
+				) : (
+					"?"
+				)}
 			</div>
 			<div className="flex-1 min-w-0">
 				<div className="flex items-baseline gap-2">

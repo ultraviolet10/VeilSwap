@@ -112,21 +112,21 @@ export function SwapCard() {
 	return (
 		<div className="w-full max-w-[440px] animate-fade-in-up">
 			{/* Command palette style header */}
-			<div className="mb-4 flex items-center justify-between animate-fade-in-up [animation-delay:100ms]">
+			<div className="mb-4 flex items-center justify-between animate-fade-in-up stagger-2">
 				<div className="flex items-center gap-2">
 					<div className="rounded-md bg-muted px-2 py-1 text-xs font-mono text-muted-foreground transition-colors duration-150 hover:bg-muted/80">
 						⌘K
 					</div>
 					<span className="text-sm text-muted-foreground">Quick swap</span>
 				</div>
-				<button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-all duration-150 hover:translate-x-0.5 active:scale-95">
+				<button type="button" className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-all duration-150 hover:translate-x-0.5 active:scale-95">
 					<Clock className="h-3 w-3" />
 					History
 				</button>
 			</div>
 
 			{/* Main interface - command palette aesthetic */}
-			<div className="overflow-hidden rounded-xl border bg-card shadow-2xl shadow-black/5 animate-fade-in-scale [animation-delay:50ms]">
+			<div className="overflow-hidden rounded-xl border bg-card shadow-2xl shadow-black/5 animate-fade-in-scale stagger-1">
 				{/* Search-like input header */}
 				<div className="border-b px-4 py-3">
 					<div className="flex items-center gap-3">
@@ -230,30 +230,20 @@ export function SwapCard() {
 			</div>
 
 			{/* Quick tokens */}
-			<div className="mt-4 flex items-center gap-2 animate-fade-in-up [animation-delay:200ms]">
+			<div className="mt-4 flex items-center gap-2 animate-fade-in-up stagger-4">
 				<span className="text-xs text-muted-foreground">Quick:</span>
-				{["ETH", "USDC", "WBTC", "DAI"].map((token, i) => (
+				{BUY_TOKENS.map((token, i) => (
 					<button
-						key={token}
-						className="rounded-md border bg-card px-2 py-1 text-xs font-medium transition-all duration-150 hover:bg-muted hover:border-brand/30 hover:-translate-y-0.5 hover:shadow-sm active:scale-95 active:translate-y-0"
+						type="button"
+						key={token.symbol}
+						onClick={() => setTokenOut(token)}
+						disabled={isActive}
+						className="rounded-md border bg-card px-2 py-1 text-xs font-medium transition-all duration-150 hover:bg-muted hover:border-brand/30 hover:-translate-y-0.5 hover:shadow-sm active:scale-95 active:translate-y-0 disabled:opacity-50 disabled:pointer-events-none"
 						style={{ animationDelay: `${250 + i * 50}ms` }}
 					>
-						{token}
+						{token.symbol}
 					</button>
 				))}
-			</div>
-
-			{/* Keyboard hints */}
-			<div className="mt-6 flex justify-center gap-6 text-xs text-muted-foreground/50 animate-fade-in-up [animation-delay:400ms]">
-				<span className="transition-colors duration-150 hover:text-muted-foreground">
-					<kbd className="font-mono">↑↓</kbd> tokens
-				</span>
-				<span className="transition-colors duration-150 hover:text-muted-foreground">
-					<kbd className="font-mono">Tab</kbd> fields
-				</span>
-				<span className="transition-colors duration-150 hover:text-muted-foreground">
-					<kbd className="font-mono">Esc</kbd> cancel
-				</span>
 			</div>
 		</div>
 	)

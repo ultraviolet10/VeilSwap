@@ -119,7 +119,10 @@ export function SwapCard() {
 					</div>
 					<span className="text-sm text-muted-foreground">Quick swap</span>
 				</div>
-				<button type="button" className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-all duration-150 hover:translate-x-0.5 active:scale-95">
+				<button
+					type="button"
+					className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-all duration-150 hover:translate-x-0.5 active:scale-95"
+				>
 					<Clock className="h-3 w-3" />
 					History
 				</button>

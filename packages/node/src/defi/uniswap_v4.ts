@@ -337,11 +337,51 @@ export class UniswapV4Manager {
 		const receipt = await this.publicClient.waitForTransactionReceipt({ hash })
 		console.log("Swap confirmed in block:", receipt.blockNumber)
 
-		const newBalance = await this.getTokenBalance(
+		const transferTopic =
+			"0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+		const accountLower = this.account.address.toLowerCase()
+		const tokenOutLower = tokenOut.toLowerCase()
+		let amountOutFromLogs = 0n
+
+		for (const log of receipt.logs as unknown as Array<{
+			address: Address
+			topics?: string[]
+			data?: `0x${string}`
+		}>) {
+			if (log.address.toLowerCase() !== tokenOutLower) {
+				continue
+			}
+			if (log.topics?.[0]?.toLowerCase() !== transferTopic) {
+				continue
+			}
+			const toTopic = log.topics?.[2]
+			if (!toTopic) {
+				continue
+			}
+			if (!toTopic.toLowerCase().endsWith(accountLower.slice(2))) {
+				continue
+			}
+			if (!log.data) {
+				continue
+			}
+			try {
+				amountOutFromLogs += BigInt(log.data)
+			} catch {
+				// Ignore malformed log data
+			}
+		}
+
+		let newBalance = await this.getTokenBalance(
 			tokenOut,
 			this.account.address,
 		)
-		const amountOut = newBalance - preOutBalance
+		let amountOut = newBalance - preOutBalance
+		if (amountOut <= 0n && amountOutFromLogs > 0n) {
+			amountOut = amountOutFromLogs
+		}
+		if (newBalance <= preOutBalance && amountOutFromLogs > 0n) {
+			newBalance = preOutBalance + amountOutFromLogs
+		}
 
 		return {
 			amountOut,

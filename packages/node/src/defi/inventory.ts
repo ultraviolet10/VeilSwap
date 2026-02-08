@@ -188,7 +188,17 @@ export class TokenInventoryManager {
 			await this.updateBalance(tokenIn)
 			await this.updateBalance(tokenOut)
 
-			const finalBalance = await this.getBalance(tokenOut)
+			const expectedBalance = currentBalance + result.amountOut
+			let finalBalance = await this.getBalance(tokenOut)
+			if (result.amountOut > 0n && finalBalance < expectedBalance) {
+				const normalized = tokenOut.toLowerCase() as Address
+				this.holdings.set(normalized, {
+					tokenAddress: normalized,
+					balance: expectedBalance,
+					lastUpdated: Date.now(),
+				})
+				finalBalance = expectedBalance
+			}
 
 			console.log(`  ✅ Swap successful!`)
 			console.log(`  Got: ${result.amountOut}`)

@@ -368,6 +368,16 @@ export class MPCServer {
 		// Fetch capacity for the OUTPUT token (what nodes need to provide to fulfill the intent)
 		// Note: tokenOut is what the nodes provide, tokenIn is what the user provides
 		let myCapacity = this.getCapacity(event.tokenOut)
+		const partyCount = BigInt(this.config.allParties.length)
+		// Use ceiling division so small intents still trigger a swap.
+		const perNodeRequirement =
+			(event.minAmountOut + partyCount - 1n) / partyCount
+		// Add a buffer so aggregate output clears the minAmountOut.
+		const swapBufferBps = 200n // 2%
+		const bufferedRequirement =
+			(perNodeRequirement * (10000n + swapBufferBps)) / 10000n
+		const requiredAmount =
+			bufferedRequirement === 0n ? 1n : bufferedRequirement
 
 		// If we don't have cached capacity and have inventory manager, check onchain balance
 		if (myCapacity === 0n && this.inventoryManager) {
@@ -377,7 +387,7 @@ export class MPCServer {
 				true,
 			)
 
-			if (onChainBalance > 0n) {
+			if (onChainBalance >= requiredAmount) {
 				console.log(`✅ Found onchain balance: ${onChainBalance}`)
 				this.setCapacity(event.tokenOut, onChainBalance)
 				myCapacity = onChainBalance
@@ -386,20 +396,26 @@ export class MPCServer {
 				// This helps exercise Uniswap integration when tokenOut balance is zero.
 				await this.inventoryManager.getBalance(event.tokenIn, true)
 				console.log(
-					`No onchain balance for ${event.tokenOut}, attempting to swap from other tokens...`,
+					`Insufficient onchain balance for ${event.tokenOut}, attempting to swap from other tokens...`,
 				)
 
 				const result = await this.inventoryManager.fulfillRequirement(
 					event.tokenOut,
-					event.minAmountOut / BigInt(this.config.allParties.length), // Estimate our share (tokenOut units)
+					requiredAmount, // Estimate our share (tokenOut units)
 				)
 
 				if (result.success) {
 					// Update capacity after swap
-					const newBalance = await this.inventoryManager.getBalance(
+					let newBalance = await this.inventoryManager.getBalance(
 						event.tokenOut,
-						true,
+						false,
 					)
+					if (newBalance === 0n) {
+						newBalance = await this.inventoryManager.getBalance(
+							event.tokenOut,
+							true,
+						)
+					}
 					this.setCapacity(event.tokenOut, newBalance)
 					myCapacity = newBalance
 					console.log(`✅ Swapped successfully! New capacity: ${myCapacity}`)

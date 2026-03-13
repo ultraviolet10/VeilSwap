@@ -22,17 +22,10 @@ The onchain contract verifies signatures from all MPC servers, confirms allocati
 
 ```mermaid
 flowchart TD
-    User([User]) -->|initiates swap| Hook["Uniswap v4 Hook\n(beforeSwap → SKIP_SWAP)"]
-    Hook -->|creates intent| SC["Settlement Contract\n(Settlement.sol)"]
-    SC -->|IntentCreated event| N1["Node: alice"]
-    SC -->|IntentCreated event| N2["Node: bob"]
-    SC -->|IntentCreated event| N3["Node: charlie"]
-    N1 <-->|P2P — RSS + Beaver triples| N2
-    N2 <-->|P2P — RSS + Beaver triples| N3
-    N1 <-->|P2P — RSS + Beaver triples| N3
-    N1 -->|signed allocation| SC
-    N2 -->|signed allocation| SC
-    N3 -->|signed allocation| SC
+    User([User]) -->|initiates swap| Hook[Uniswap v4 Hook]
+    Hook -->|SKIP_SWAP + intent| SC[Settlement Contract]
+    SC -->|IntentCreated| MPC[MPC Node Network\nalice · bob · charlie]
+    MPC -->|signed allocations| SC
     SC -->|atomic transfer| User
 ```
 

@@ -30,6 +30,7 @@ Each server learns **only** their own allocation for an order through secure mul
 ### What Was Built
 
 ✅ **Complete MPC Implementation** (~3,000 lines of TypeScript)
+
 - Cryptographic primitives (field arithmetic, secret sharing)
 - 3-party Replicated Secret Sharing (RSS)
 - Secure computation protocols

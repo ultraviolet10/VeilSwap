@@ -16,7 +16,7 @@ The hook intercepts swaps at the pool level via the `beforeSwap` callback. Rathe
 N distributed servers jointly compute allocation decisions using 3-party Replicated Secret Sharing (RSS), Beaver triples, and arithmetic circuits — without revealing individual liquidity capacities to one another. Each server learns only its own allocation while the network collectively verifies total capacity and calculates proportional splits.
 
 **Settlement Contract:**
-The onchain contract verifies signatures from all MPC servers, confirms allocations sum to the order size, and executes atomic transfers. The contract either executes all pulls and the swap, or reverts entirely — with nonce-based replay protection ensuring each intent is settled exactly once.
+The onchain contract verifies signatures from all MPC servers, confirms allocations sum to the order size, and executes atomic transfers. The contract either executes all pulls and the swap, or reverts entirely, with nonce-based replay protection ensuring each intent is settled exactly once.
 
 ## System Architecture
 

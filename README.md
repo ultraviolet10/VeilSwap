@@ -1,10 +1,9 @@
 # VeilSwap
 
-:::info
-🏆 [**HackMoney 2026**](https://ethglobal.com/showcase/veilswap-2y9sd) — Uniswap Foundation Uniswap v4 Privacy DeFi **2nd Place** · ENS Prize Pool
-
-_See also: [project write-up](https://hackmd.io/@ultraviolet1000/HyVZnGgdZl)_
-:::
+> [!NOTE]
+> 🏆 [**HackMoney 2026**](https://ethglobal.com/showcase/veilswap-2y9sd) — Uniswap Foundation Uniswap v4 Privacy DeFi **2nd Place** · ENS Prize Pool
+>
+> _See also: [project write-up](https://hackmd.io/@ultraviolet1000/HyVZnGgdZl)_
 
 Privacy-preserving intent settlement via MPC nodes, onchain Settlement contract, and a web UI.
 

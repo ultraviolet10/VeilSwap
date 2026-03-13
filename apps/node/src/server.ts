@@ -376,8 +376,7 @@ export class MPCServer {
 		const swapBufferBps = 200n // 2%
 		const bufferedRequirement =
 			(perNodeRequirement * (10000n + swapBufferBps)) / 10000n
-		const requiredAmount =
-			bufferedRequirement === 0n ? 1n : bufferedRequirement
+		const requiredAmount = bufferedRequirement === 0n ? 1n : bufferedRequirement
 
 		// If we don't have cached capacity and have inventory manager, check onchain balance
 		if (myCapacity === 0n && this.inventoryManager) {

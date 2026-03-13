@@ -29,7 +29,7 @@
 		"@uniswap/universal-router-sdk": "^4.30.0",
 		"@uniswap/v4-sdk": "^1.27.0",
 		"dotenv": "^16.4.5",
-		"viem": "^2.21.54",
+		"viem": "2.21.54",
 		"ws": "^8.18.0"
 	},
 	"devDependencies": {

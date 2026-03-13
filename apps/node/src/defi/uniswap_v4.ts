@@ -371,10 +371,7 @@ export class UniswapV4Manager {
 			}
 		}
 
-		let newBalance = await this.getTokenBalance(
-			tokenOut,
-			this.account.address,
-		)
+		let newBalance = await this.getTokenBalance(tokenOut, this.account.address)
 		let amountOut = newBalance - preOutBalance
 		if (amountOut <= 0n && amountOutFromLogs > 0n) {
 			amountOut = amountOutFromLogs
